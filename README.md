@@ -14,6 +14,7 @@
 <h4><code>fabric</code> is an open-source framework for augmenting humans using AI.</h4>
 </p>
 
+[Introduction Video](#introduction-video) •
 [What and Why](#whatandwhy) •
 [Philosophy](#philosophy) •
 [Quickstart](#quickstart) •
@@ -23,12 +24,48 @@
 
 </div>
 
+## Navigation
+
+- [Introduction Videos](#introduction-videos)
+- [What and Why](#what-and-why)
+- [Philosophy](#philosophy)
+  - [Breaking problems into components](#breaking-problems-into-components)
+  - [Too many prompts](#too-many-prompts)
+  - [The Fabric approach to prompting](#our-approach-to-prompting)
+- [Quickstart](#quickstart)
+  - [Setting up the fabric commands](#setting-up-the-fabric-commands)
+  - [Using the fabric client](#using-the-fabric-client)
+  - [Just use the Patterns](#just-use-the-patterns)
+  - [Create your own Fabric Mill](#create-your-own-fabric-mill)
+- [Structure](#structure)
+  - [Components](#components)
+  - [CLI-native](#cli-native)
+  - [Directly calling Patterns](#directly-calling-patterns)
+- [Examples](#examples)
+- [Meta](#meta)
+  - [Primary contributors](#primary-contributors)
+
+<br />
+
 > [!NOTE]  
-> We're still working on both code and documentation. Please be patient with us as we roll things out in the next week.
+> We are adding functionality to the project so often that you should update often as well. That means: `git pull; pipx upgrade fabric; fabric --update; source ~/.zshrc (or ~/.bashrc)` in the main directory!
+
+**March 13, 2024** — We just added `pipx` install support, which makes it way easier to install Fabric, support for Claude, local models via Ollama, and a number of new Patterns. Be sure to update and check `fabric -h` for the latest!
+
+## Introduction videos
+
+<div align="center">
+<a href="https://youtu.be/wPEyyigh10g">
+<img width="972" alt="fabric_intro_video" src="https://github.com/danielmiessler/fabric/assets/50654/1eb1b9be-0bab-4c77-8ed2-ed265e8a3435"></a>
+    <br /><br />
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=lEXd6TXPw7E target="_blank">
+ <img src="http://img.youtube.com/vi/lEXd6TXPw7E/mqdefault.jpg" alt="Watch the video" width="972" " />
+</a>
+</div>
 
 ## What and why
 
-Since the start of 2023 and GenAI we've seen a massive number of AI applications for accomplishing tasks. It's powerful, but **it's not easy to integrate this functionality into our lives.**
+Since the start of 2023 and GenAI we've seen a massive number of AI applications for accomplishing tasks. It's powerful, but _it's not easy to integrate this functionality into our lives._
 
 <div align="center">
 <h4>In other words, AI doesn't have a capabilities problem—it has an <em>integration</em> problem.</h4>
@@ -64,7 +101,7 @@ Fabric has Patterns for all sorts of life and work activities, including:
 - Getting summaries of long, boring content
 - Explaining code to you
 - Turning bad documentation into usable documentation
-- Create social media posts from any content input
+- Creating social media posts from any content input
 - And a million more…
 
 ### Our approach to prompting
@@ -87,11 +124,161 @@ https://github.com/danielmiessler/fabric/blob/main/patterns/extract_wisdom/syste
 
 ## Quickstart
 
-There are three (3) main ways to get started with Fabric.
+The most feature-rich way to use Fabric is to use the `fabric` client, which can be found under <a href="https://github.com/danielmiessler/fabric/tree/main/client">`/client`</a> directory in this repository.
+
+### Setting up the fabric commands
+
+Follow these steps to get all fabric related apps installed and configured.
+
+1. Navigate to where you want the Fabric project to live on your system in a semi-permanent place on your computer.
+
+```bash
+# Find a home for Fabric
+cd /where/you/keep/code
+```
+
+2. Clone the project to your computer.
+
+```bash
+# Clone Fabric to your computer
+git clone https://github.com/danielmiessler/fabric.git
+```
+
+3. Enter Fabric's main directory
+
+```bash
+# Enter the project folder (where you cloned it)
+cd fabric
+```
+
+4. Install pipx:
+
+macOS:
+
+```bash
+brew install pipx
+```
+
+Linux:
+
+```bash
+sudo apt install pipx
+```
+
+Windows:
+
+Use WSL and follow the Linux instructions.
+
+5. Install fabric
+
+```bash
+pipx install .
+```
+
+6. Run setup:
+
+```bash
+fabric --setup
+```
+
+7. Restart your shell to reload everything.
+
+8. Now you are up and running! You can test by running the help.
+
+```bash
+# Making sure the paths are set up correctly
+fabric --help
+```
+
+> [!NOTE]  
+> If you're using the `server` functions, `fabric-api` and `fabric-webui` need to be run in distinct terminal windows.
+
+### Using the `fabric` client
+
+Once you have it all set up, here's how to use it.
+
+1. Check out the options
+   `fabric -h`
+
+```bash
+us the results in
+                        realtime. NOTE: You will not be able to pipe the
+                        output into another command.
+  --list, -l            List available patterns
+  --clear               Clears your persistent model choice so that you can
+                        once again use the --model flag
+  --update, -u          Update patterns. NOTE: This will revert the default
+                        model to gpt4-turbo. please run --changeDefaultModel
+                        to once again set default model
+  --pattern PATTERN, -p PATTERN
+                        The pattern (prompt) to use
+  --setup               Set up your fabric instance
+  --changeDefaultModel CHANGEDEFAULTMODEL
+                        Change the default model. For a list of available
+                        models, use the --listmodels flag.
+  --model MODEL, -m MODEL
+                        Select the model to use. NOTE: Will not work if you
+                        have set a default model. please use --clear to clear
+                        persistence before using this flag
+  --listmodels          List all available models
+  --remoteOllamaServer REMOTEOLLAMASERVER
+                        The URL of the remote ollamaserver to use. ONLY USE
+                        THIS if you are using a local ollama server in an non-
+                        deault location or port
+  --context, -c         Use Context file (context.md) to add context to your
+                        pattern
+age: fabric [-h] [--text TEXT] [--copy] [--agents {trip_planner,ApiKeys}]
+              [--output [OUTPUT]] [--stream] [--list] [--clear] [--update]
+              [--pattern PATTERN] [--setup]
+              [--changeDefaultModel CHANGEDEFAULTMODEL] [--model MODEL]
+              [--listmodels] [--remoteOllamaServer REMOTEOLLAMASERVER]
+              [--context]
+
+An open source framework for augmenting humans using AI.
+
+options:
+  -h, --help            show this help message and exit
+  --text TEXT, -t TEXT  Text to extract summary from
+  --copy, -C            Copy the response to the clipboard
+  --agents {trip_planner,ApiKeys}, -a {trip_planner,ApiKeys}
+                        Use an AI agent to help you with a task. Acceptable
+                        values are 'trip_planner' or 'ApiKeys'. This option
+                        cannot be used with any other flag.
+  --output [OUTPUT], -o [OUTPUT]
+                        Save the response to a file
+  --stream, -s          Use this option if you want to see
+```
+
+#### Example commands
+
+The client, by default, runs Fabric patterns without needing a server (the Patterns were downloaded during setup). This means the client connects directly to OpenAI using the input given and the Fabric pattern used.
+
+1. Run the `summarize` Pattern based on input from `stdin`. In this case, the body of an article.
+
+```bash
+pbpaste | fabric --pattern summarize
+```
+
+2. Run the `analyze_claims` Pattern with the `--stream` option to get immediate and streaming results.
+
+```bash
+pbpaste | fabric --stream --pattern analyze_claims
+```
+
+3. **new** All of the patterns have been added as aliases to your bash (or zsh) config file
+
+```bash
+pbpaste | analyze_claims --stream
+```
+
+> [!NOTE]  
+> More examples coming in the next few days, including a demo video!
+
+### Just use the Patterns
 
 <img width="1173" alt="fabric-patterns-screenshot" src="https://github.com/danielmiessler/fabric/assets/50654/9186a044-652b-4673-89f7-71cf066f32d8">
 
-### 1. Just use the Patterns
+<br />
 
 If you're not looking to do anything fancy, and you just want a lot of great prompts, you can navigate to the [`/patterns`](https://github.com/danielmiessler/fabric/tree/main/patterns) directory and start exploring!
 
@@ -101,25 +288,13 @@ You can use any of the Patterns you see there in any AI application that you hav
 
 The wisdom of crowds for the win.
 
-### 2. Create your own Fabric Mill (Server)
+### Create your own Fabric Mill
 
 <img width="2070" alt="fabric_mill_architecture" src="https://github.com/danielmiessler/fabric/assets/50654/ec3bd9b5-d285-483d-9003-7a8e6d842584">
 
 <br />
 
 But we go beyond just providing Patterns. We provide code for you to build your very own Fabric server and personal AI infrastructure!
-
-To get started, head over to the [`/server/`](https://github.com/danielmiessler/fabric/tree/main/server) directory and set up your own Fabric Mill with your own Patterns running! You can then use the [`/client/standalone_client_examples`](https://github.com/danielmiessler/fabric/tree/main/client/standalone_client_examples) to connect to it.
-
-### 3. The standalone client
-
-We're almost done with a `fabric` client that will let you do all sorts of cool stuff, including:
-
-- Calling patterns without connecting to a Fabric server (direct to OpenAI).
-- Streaming mode to get instant and dynamic results.
-- Other cool stuff…
-
-We expect this client to be ready very within a week or so, and we'll update the Quickstart as soon as it is.
 
 ## Structure
 
@@ -144,12 +319,12 @@ Once you're set up, you can do things like:
 
 ```bash
 # Take any idea from `stdin` and send it to the `/write_essay` API!
-cat "An idea that coding is like speaking with rules." | write_essay
+echo "An idea that coding is like speaking with rules." | write_essay
 ```
 
 ### Directly calling Patterns
 
-One key feature of `fabric` and its Markdown-based format is the ability to ** directly reference** (and edit) individual [patterns](https://github.com/danielmiessler/fabric/tree/main#naming) directly—on their own—without surrounding code.
+One key feature of `fabric` and its Markdown-based format is the ability to _ directly reference_ (and edit) individual [patterns](https://github.com/danielmiessler/fabric/tree/main#naming) directly—on their own—without surrounding code.
 
 As an example, here's how to call _the direct location_ of the `extract_wisdom` pattern.
 
@@ -159,7 +334,7 @@ https://github.com/danielmiessler/fabric/blob/main/patterns/extract_wisdom/syste
 
 This means you can cleanly, and directly reference any pattern for use in a web-based AI app, your own code, or wherever!
 
-Even better, you can also have your [Mill](https://github.com/danielmiessler/fabric/tree/main#naming) functionality directly call **system** and **user** prompts from `fabric`, meaning you can have your personal AI ecosystem automatically kept up to date with the latest version of your favorite [Patterns](https://github.com/danielmiessler/fabric/tree/main#naming).
+Even better, you can also have your [Mill](https://github.com/danielmiessler/fabric/tree/main#naming) functionality directly call _system_ and _user_ prompts from `fabric`, meaning you can have your personal AI ecosystem automatically kept up to date with the latest version of your favorite [Patterns](https://github.com/danielmiessler/fabric/tree/main#naming).
 
 Here's what that looks like in code:
 
@@ -293,15 +468,20 @@ The content features a conversation between two individuals discussing various t
 > [!NOTE]  
 > Special thanks to the following people for their inspiration and contributions!
 
-- **Caleb Sima** for pushing me over the edge of whether to make this a public project or not.
-- **Joel Parish** for super useful input on the project's Github directory structure.
-- **Jonathan Dunn** for spectacular work on the soon-to-be-released universal client.
+- _Caleb Sima_ for pushing me over the edge of whether to make this a public project or not.
+- _Joel Parish_ for super useful input on the project's Github directory structure.
+- _Jonathan Dunn_ for spectacular work on the soon-to-be-released universal client.
+- _Joseph Thacker_ for the idea of a `-c` context flag that adds pre-created context in the `./config/fabric/` directory to all Pattern queries.
+- _Jason Haddix_ for the idea of a stitch (chained Pattern) to filter content using a local model before sending on to a cloud model, i.e., cleaning customer data using `llama2` before sending on to `gpt-4` for analysis.
+- _Dani Goland_ for enhancing the Fabric Server (Mill) infrastructure by migrating to FastAPI, breaking the server into discrete pieces, and Dockerizing the entire thing.
+- _Andre Guerra_ for simplifying installation by getting us onto Poetry for virtual environment and dependency management.
 
 ### Primary contributors
 
-<a href="https://github.com/sbehrens"><img src="https://avatars.githubusercontent.com/u/50654?v=4" title="Daniel Miessler" width="50" height="50"></a>
+<a href="https://github.com/danielmiessler"><img src="https://avatars.githubusercontent.com/u/50654?v=4" title="Daniel Miessler" width="50" height="50"></a>
 <a href="https://github.com/xssdoctor"><img src="https://avatars.githubusercontent.com/u/9218431?v=4" title="Jonathan Dunn" width="50" height="50"></a>
-<a href="https://github.com/danielmiessler"><img src="https://avatars.githubusercontent.com/u/688589?v=4" title="Scott Behrens" width="50" height="50"></a>
+<a href="https://github.com/sbehrens"><img src="https://avatars.githubusercontent.com/u/688589?v=4" title="Scott Behrens" width="50" height="50"></a>
+<a href="https://github.com/agu3rra"><img src="https://avatars.githubusercontent.com/u/10410523?v=4" title="Andre Guerra" width="50" height="50"></a>
 
 `fabric` was created by <a href="https://danielmiessler.com/subscribe" target="_blank">Daniel Miessler</a> in January of 2024.
 <br /><br />
